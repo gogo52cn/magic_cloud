@@ -16,6 +16,8 @@ module MagicCloud
     def initialize(words, options = {})
       @words = words.sort_by(&:last).reverse
       @options = options
+      @max_font= options[:max_font]
+      @min_font= options[:min_font]
       @scaler = make_scaler(words, options[:scale] || :log)
       @rotator = make_rotator(options[:rotate] || :square)
       @palette = make_palette(options[:palette] || :default)
@@ -126,7 +128,7 @@ module MagicCloud
 
       smin = norm.call(words.map(&:last).min)
       smax = norm.call(words.map(&:last).max)
-      koeff = (FONT_MAX - FONT_MIN).to_f / (smax - smin)
+      koeff = (@max_font- @min_font).to_f / (smax - smin)
 
       ->(_word, size, _index){
         ssize = norm.call(size)
